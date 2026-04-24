@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import base64
 import os
+from pathlib import Path
 from typing import Any
 
 import aiofiles
@@ -30,6 +31,43 @@ VISION_MODEL = os.environ.get(
     "VISION_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct"
 )
 
+# Security: only allow image files, bound the size to prevent a malicious /
+# prompt-injected caller from exfiltrating arbitrary local files as base64.
+ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
+MAX_IMAGE_BYTES = 20 * 1024 * 1024  # 20 MB
+IMAGE_MAGIC_PREFIXES = (
+    b"\x89PNG\r\n\x1a\n",  # PNG
+    b"\xff\xd8\xff",        # JPEG
+    b"GIF87a",
+    b"GIF89a",
+    b"RIFF",                # WEBP (RIFF....WEBP)
+    b"BM",                  # BMP
+)
+
+
+def _validate_image_path(path_str: str) -> Path:
+    """Reject non-image paths and oversize files before opening them."""
+    p = Path(path_str).resolve()
+    if not p.is_file():
+        raise ValueError(f"Not a file: {path_str}")
+    if p.suffix.lower() not in ALLOWED_EXTENSIONS:
+        raise ValueError(
+            f"Refusing to read '{p.suffix}' — only image files are allowed "
+            f"({', '.join(sorted(ALLOWED_EXTENSIONS))})."
+        )
+    size = p.stat().st_size
+    if size > MAX_IMAGE_BYTES:
+        raise ValueError(
+            f"Image too large: {size} bytes (max {MAX_IMAGE_BYTES})."
+        )
+    return p
+
+
+def _validate_magic(data: bytes) -> None:
+    if not any(data.startswith(m) for m in IMAGE_MAGIC_PREFIXES):
+        raise ValueError("File content does not look like a supported image.")
+
+
 server = Server(SERVER_NAME)
 
 
@@ -38,8 +76,10 @@ class VisionClient:
         self.client = AsyncGroq(api_key=api_key)
 
     async def analyze(self, image_path: str, prompt: str) -> str:
-        async with aiofiles.open(image_path, "rb") as f:
+        p = _validate_image_path(image_path)
+        async with aiofiles.open(p, "rb") as f:
             data = await f.read()
+        _validate_magic(data)
         b64 = base64.b64encode(data).decode("utf-8")
 
         response = await self.client.chat.completions.create(
@@ -194,7 +234,15 @@ async def _run_clipboard(prompt_key: str, override: str | None = None) -> str:
         path = save_clipboard_image()
     except ClipboardError as e:
         return f"Clipboard error: {e}"
-    return await _run(prompt_key, path, override)
+    try:
+        return await _run(prompt_key, path, override)
+    finally:
+        # Privacy: clipboard screenshots may contain secrets (tokens, chats,
+        # credentials). Delete the temp file as soon as analysis is done.
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
 
 
 @server.call_tool()
