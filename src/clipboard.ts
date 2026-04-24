@@ -50,7 +50,7 @@ export function saveClipboardImage(): string {
   } catch (err) {
     if (err instanceof ClipboardError) throw err;
     throw new ClipboardError(
-      `Failed to read clipboard: ${err instanceof Error ? err.message : String(err)}`
+      `Failed to read clipboard: ${err instanceof Error ? err.message : String(err)}`,
     );
   }
 
@@ -87,7 +87,7 @@ function grabWindows(out: string): void {
       tryPowerShell("pwsh");
     } catch {
       throw new ClipboardError(
-        "No image found in clipboard. Ensure an image is copied to the clipboard."
+        "No image found in clipboard. Ensure an image is copied to the clipboard.",
       );
     }
   }
@@ -123,7 +123,7 @@ function grabMacosPngpaste(out: string): void {
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") {
       throw new ClipboardError(
-        "No image in clipboard. Install pngpaste for better support: brew install pngpaste"
+        "No image in clipboard. Install pngpaste for better support: brew install pngpaste",
       );
     }
     throw new ClipboardError("No image in clipboard (pngpaste failed).");
@@ -160,6 +160,6 @@ function grabLinux(out: string): void {
   }
 
   throw new ClipboardError(
-    `No image in clipboard. Install one of: wl-clipboard (Wayland) or xclip (X11). Attempts: ${errors.join(", ")}`
+    `No image in clipboard. Install one of: wl-clipboard (Wayland) or xclip (X11). Attempts: ${errors.join(", ")}`,
   );
 }

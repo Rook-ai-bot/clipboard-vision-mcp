@@ -34,7 +34,7 @@ export function validateImagePath(pathStr: string): string {
   const ext = p.substring(p.lastIndexOf(".")).toLowerCase();
   if (!ALLOWED_EXTENSIONS.has(ext)) {
     throw new Error(
-      `Refusing to read '${ext}' — only image files are allowed (${[...ALLOWED_EXTENSIONS].sort().join(", ")}).`
+      `Refusing to read '${ext}' — only image files are allowed (${[...ALLOWED_EXTENSIONS].sort().join(", ")}).`,
     );
   }
   if (stat.size > MAX_IMAGE_BYTES) {
@@ -91,7 +91,10 @@ export function createVisionClient(apiKey: string, model: string): VisionClient 
 function guessMime(data: Buffer): string {
   if (data.subarray(0, 4).equals(Buffer.from("\x89PNG"))) return "image/png";
   if (data.subarray(0, 3).equals(Buffer.from("\xff\xd8\xff"))) return "image/jpeg";
-  if (data.subarray(0, 6).equals(Buffer.from("GIF87a")) || data.subarray(0, 6).equals(Buffer.from("GIF89a")))
+  if (
+    data.subarray(0, 6).equals(Buffer.from("GIF87a")) ||
+    data.subarray(0, 6).equals(Buffer.from("GIF89a"))
+  )
     return "image/gif";
   if (data.subarray(0, 4).equals(Buffer.from("RIFF"))) return "image/webp";
   if (data.subarray(0, 2).equals(Buffer.from("BM"))) return "image/bmp";

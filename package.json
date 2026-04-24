@@ -13,7 +13,11 @@
   ],
   "scripts": {
     "start": "bun run src/index.ts",
-    "dev": "bun --watch src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "lint": "oxlint src/",
+    "format": "oxfmt --write src/",
+    "format:check": "oxfmt src/",
+    "check": "oxlint src/ && oxfmt --check src/"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -40,5 +44,9 @@
     "type": "git",
     "url": "https://github.com/Rook-ai-bot/clipboard-vision-mcp.git"
   },
-  "homepage": "https://github.com/Rook-ai-bot/clipboard-vision-mcp#readme"
+  "homepage": "https://github.com/Rook-ai-bot/clipboard-vision-mcp#readme",
+  "devDependencies": {
+    "oxfmt": "^0.46.0",
+    "oxlint": "^1.61.0"
+  }
 }

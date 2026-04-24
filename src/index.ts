@@ -25,8 +25,10 @@ const VISION_MODEL = process.env.VISION_MODEL || "meta-llama/llama-4-scout-17b-1
 // ─── Prompt templates (same as Python version) ───────────────────────────
 
 const PROMPTS: Record<string, string> = {
-  analyze: "Describe this image in detail. Identify all relevant elements, context, and anything that would help someone who cannot see it.",
-  extract_text: "Extract ALL text from this image. Return only the text, preserving layout and line breaks. No commentary.",
+  analyze:
+    "Describe this image in detail. Identify all relevant elements, context, and anything that would help someone who cannot see it.",
+  extract_text:
+    "Extract ALL text from this image. Return only the text, preserving layout and line breaks. No commentary.",
   describe_ui:
     "Analyze this UI screenshot. Describe: 1) overall layout, 2) components (buttons, forms, navigation, inputs), 3) visible text and labels, 4) state (errors, active tabs, modals).",
   diagnose_error:
@@ -104,7 +106,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -118,7 +120,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -132,7 +134,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -146,7 +148,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -160,7 +162,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 // File-path tools (for when the image is already saved)
@@ -178,7 +180,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -194,7 +196,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -210,7 +212,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -226,7 +228,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -242,7 +244,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -258,7 +260,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 server.tool(
@@ -274,7 +276,7 @@ server.tool(
     } catch (e) {
       return errorResult(e);
     }
-  }
+  },
 );
 
 // ─── Start ───────────────────────────────────────────────────────────────
