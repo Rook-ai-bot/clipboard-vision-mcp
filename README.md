@@ -2,7 +2,7 @@
 
 > 🇫🇷 **[Version française disponible → README.fr.md](README.fr.md)**
 
-> Add vision to text-only models in Opencode (DeepSeek V4, GLM 5.1, Qwen, Kimi, ...) — **see the image in your clipboard directly**, no manual file saving.
+> Add vision to text-only models in Opencode (**DeepSeek V4**, **GLM 5.1**) — **see the image in your clipboard directly**, no manual file saving.
 
 **Tested on Windows 11 + Opencode + DeepSeek V4 Pro.** Multi-OS clipboard support (Windows / macOS / Linux X11 / Linux Wayland).
 
@@ -12,13 +12,24 @@ Forked from [itcomgroup/vision-mcp-server](https://github.com/itcomgroup/vision-
 
 ## The problem
 
-Cheap/fast text-only models like DeepSeek V4, GLM, Qwen, or Kimi are great for code, but they cannot read images. Every time you paste a screenshot, the model asks you to save it to disk and provide a path.
+Cheap/fast text-only models like **DeepSeek V4** and **GLM 5.1** are great for code, but they cannot read images. Every time you paste a screenshot, the model asks you to save it to disk and provide a path.
 
 ## The fix
 
 This MCP server exposes `*_from_clipboard` tools. When the LLM needs to see your screenshot, it calls `analyze_clipboard` — the server reads the clipboard image, sends it to a real vision model (**Groq + Llama-4 Scout, free tier**), and returns a text description the text model can reason about.
 
 Result: **paste → ask → done.** No file shuffling.
+
+---
+
+## 🤖 One-prompt install via AI (recommended)
+
+Instead of running the steps below manually, paste one of these prompts into any coding assistant (DeepSeek, GLM, Claude, GPT, ...) and it will set everything up for you end-to-end — clone, venv, deps, MCP config, keybindings:
+
+- 🇬🇧 **[docs/INSTALL_PROMPT_EN.md](docs/INSTALL_PROMPT_EN.md)**
+- 🇫🇷 **[docs/INSTALL_PROMPT_FR.md](docs/INSTALL_PROMPT_FR.md)**
+
+Prefer doing it yourself? Keep reading.
 
 ---
 
@@ -136,15 +147,6 @@ Restart Opencode after editing.
 **Yes.** Opencode re-reads `opencode.json` at every launch and auto-spawns any MCP server with `"type": "local"` and `"enabled": true`. Because the command uses the **absolute path to the venv's Python**, it doesn't matter which shell or working directory Opencode is launched from.
 
 Reboot → open Opencode → `clipboard-vision` tools are listed. No manual step.
-
----
-
-## 🤖 One-prompt install via AI
-
-Instead of running the steps manually, paste one of these prompts into any coding assistant (DeepSeek, GLM, Claude, GPT, ...) and it sets everything up for you:
-
-- 🇬🇧 [docs/INSTALL_PROMPT_EN.md](docs/INSTALL_PROMPT_EN.md)
-- 🇫🇷 [docs/INSTALL_PROMPT_FR.md](docs/INSTALL_PROMPT_FR.md)
 
 ---
 

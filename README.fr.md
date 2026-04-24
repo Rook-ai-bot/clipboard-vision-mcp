@@ -2,7 +2,7 @@
 
 > 🇬🇧 **[English version → README.md](README.md)**
 
-> Ajoute la vision aux modèles texte-only dans Opencode (DeepSeek V4, GLM 5.1, Qwen, Kimi, ...) — **lis directement l'image dans ton presse-papiers**, sans sauvegarder de fichier à la main.
+> Ajoute la vision aux modèles texte-only dans Opencode (**DeepSeek V4**, **GLM 5.1**) — **lis directement l'image dans ton presse-papiers**, sans sauvegarder de fichier à la main.
 
 **Testé sur Windows 11 + Opencode + DeepSeek V4 Pro.** Support clipboard multi-OS (Windows / macOS / Linux X11 / Linux Wayland).
 
@@ -12,13 +12,24 @@ Forké depuis [itcomgroup/vision-mcp-server](https://github.com/itcomgroup/visio
 
 ## Le problème
 
-Les modèles texte-only rapides/pas chers (DeepSeek V4, GLM, Qwen, Kimi) sont excellents pour le code mais ne savent pas lire d'images. À chaque capture d'écran collée, le modèle te demande de la sauvegarder sur disque et de lui donner le chemin.
+Les modèles texte-only rapides et peu coûteux comme **DeepSeek V4** et **GLM 5.1** sont excellents pour le code mais ne savent pas lire d'images. À chaque capture d'écran collée, le modèle te demande de la sauvegarder sur disque et de lui donner le chemin.
 
 ## La solution
 
 Ce serveur MCP expose des outils `*_from_clipboard`. Quand le LLM veut voir ta capture, il appelle `analyze_clipboard` — le serveur lit l'image du presse-papiers, l'envoie à un vrai modèle de vision (**Groq + Llama-4 Scout, gratuit**), et renvoie une description texte que le modèle peut exploiter.
 
 Résultat : **copier → demander → terminé.** Aucun fichier à manipuler.
+
+---
+
+## 🤖 Installation en un prompt via IA (recommandé)
+
+Au lieu de faire les étapes manuelles ci-dessous, colle un de ces prompts dans n'importe quel assistant de code (DeepSeek, GLM, Claude, GPT, ...) et il fait tout de A à Z — clone, venv, dépendances, config MCP, raccourcis :
+
+- 🇫🇷 **[docs/INSTALL_PROMPT_FR.md](docs/INSTALL_PROMPT_FR.md)**
+- 🇬🇧 **[docs/INSTALL_PROMPT_EN.md](docs/INSTALL_PROMPT_EN.md)**
+
+Tu préfères installer toi-même ? Continue à lire.
 
 ---
 
@@ -136,15 +147,6 @@ Redémarre Opencode.
 **Oui.** Opencode relit `opencode.json` à chaque lancement et démarre automatiquement tout serveur MCP avec `"type": "local"` et `"enabled": true`. Comme la commande utilise le **chemin absolu du Python du venv**, peu importe depuis quel shell ou dossier Opencode est lancé.
 
 Redémarre le PC → ouvre Opencode → les outils `clipboard-vision` sont listés. Zéro manip manuelle.
-
----
-
-## 🤖 Installation en un prompt via IA
-
-Au lieu de faire les étapes à la main, colle un de ces prompts dans n'importe quel assistant de code (DeepSeek, GLM, Claude, GPT, ...) et il installe tout pour toi :
-
-- 🇫🇷 [docs/INSTALL_PROMPT_FR.md](docs/INSTALL_PROMPT_FR.md)
-- 🇬🇧 [docs/INSTALL_PROMPT_EN.md](docs/INSTALL_PROMPT_EN.md)
 
 ---
 
