@@ -1,5 +1,6 @@
+#!/usr/bin/env bun
 /**
- * MCP server exposing vision tools backed by Groq + Llama-4 Scout.
+ * @karnak19/clipboard-vision-mcp — MCP server exposing vision tools backed by Groq + Llama-4 Scout.
  *
  * Two families of tools:
  *   - *_from_path       : analyze an image file on disk.

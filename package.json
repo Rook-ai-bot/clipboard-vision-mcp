@@ -1,11 +1,16 @@
 {
-  "name": "clipboard-vision-mcp",
+  "name": "@karnak19/clipboard-vision-mcp",
   "version": "0.2.0",
-  "description": "MCP server that adds vision to text-only LLMs via clipboard analysis using Groq + Llama-4 Scout",
+  "description": "MCP server that adds vision to text-only LLMs via clipboard analysis — Groq + Llama-4 Scout. Zero-config with bunx.",
   "type": "module",
   "bin": {
     "clipboard-vision-mcp": "./src/index.ts"
   },
+  "files": [
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch src/index.ts"
@@ -15,9 +20,25 @@
     "groq-sdk": "^0.25.0",
     "zod": "^4.3.6"
   },
-  "keywords": ["mcp", "vision", "clipboard", "groq", "llama"],
+  "keywords": [
+    "mcp",
+    "vision",
+    "clipboard",
+    "groq",
+    "llama",
+    "opencode",
+    "deepseek",
+    "glm",
+    "ai",
+    "llm"
+  ],
   "license": "MIT",
   "engines": {
     "bun": ">=1.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rook-ai-bot/clipboard-vision-mcp.git"
+  },
+  "homepage": "https://github.com/Rook-ai-bot/clipboard-vision-mcp#readme"
 }
