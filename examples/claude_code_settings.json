@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "clipboard-vision": {
-      "command": "python",
-      "args": ["-m", "clipboard_vision_mcp"],
+      "command": "bun",
+      "args": ["run", "/absolute/path/to/clipboard-vision-mcp/src/index.ts"],
       "env": {
         "GROQ_API_KEY": "gsk_your_key_here"
       }

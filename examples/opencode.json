@@ -2,7 +2,7 @@
   "mcp": {
     "clipboard-vision": {
       "type": "local",
-      "command": ["python", "-m", "clipboard_vision_mcp"],
+      "command": ["bun", "run", "/absolute/path/to/clipboard-vision-mcp/src/index.ts"],
       "environment": {
         "GROQ_API_KEY": "gsk_your_key_here"
       },

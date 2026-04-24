@@ -1,11 +1,5 @@
-__pycache__/
-*.py[cod]
-*.egg-info/
-build/
+node_modules/
 dist/
-.venv/
-venv/
-env/
 .env
 .env.local
 *.log
@@ -13,6 +7,3 @@ env/
 Thumbs.db
 .idea/
 .vscode/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/

@@ -1,0 +1,23 @@
+{
+  "name": "clipboard-vision-mcp",
+  "version": "0.2.0",
+  "description": "MCP server that adds vision to text-only LLMs via clipboard analysis using Groq + Llama-4 Scout",
+  "type": "module",
+  "bin": {
+    "clipboard-vision-mcp": "./src/index.ts"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "groq-sdk": "^0.25.0",
+    "zod": "^4.3.6"
+  },
+  "keywords": ["mcp", "vision", "clipboard", "groq", "llama"],
+  "license": "MIT",
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

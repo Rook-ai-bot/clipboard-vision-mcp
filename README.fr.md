@@ -1,12 +1,12 @@
 # clipboard-vision-mcp
 
-> 🇬🇧 **[English version → README.md](README.md)**
+> 🇬🇧 **[Version anglaise → README.md](README.md)**
 
 > Ajoute la vision aux modèles texte-only dans Opencode (**DeepSeek V4**, **GLM 5.1**) — **lis directement l'image dans ton presse-papiers**, sans sauvegarder de fichier à la main.
 
 **Testé sur Windows 11 + Opencode + DeepSeek V4 Pro.** Support clipboard multi-OS (Windows / macOS / Linux X11 / Linux Wayland).
 
-Forké depuis [itcomgroup/vision-mcp-server](https://github.com/itcomgroup/vision-mcp-server) — réécrit autour d'outils clipboard-first, durcissement sécurité, extraction clipboard cross-platform, et installation via prompt IA.
+Forké depuis [itcomgroup/vision-mcp-server](https://github.com/itcomgroup/vision-mcp-server) — réécrit autour d'outils clipboard-first, durcissement sécurité, extraction clipboard cross-platform, et maintenant propulsé par **TypeScript + Bun**.
 
 ---
 
@@ -22,17 +22,6 @@ Résultat : **copier → demander → terminé.** Aucun fichier à manipuler.
 
 ---
 
-## 🤖 Installation en un prompt via IA (recommandé)
-
-Au lieu de faire les étapes manuelles ci-dessous, colle un de ces prompts dans n'importe quel assistant de code (DeepSeek, GLM, Claude, GPT, ...) et il fait tout de A à Z — clone, venv, dépendances, config MCP, raccourcis :
-
-- 🇫🇷 **[docs/INSTALL_PROMPT_FR.md](docs/INSTALL_PROMPT_FR.md)**
-- 🇬🇧 **[docs/INSTALL_PROMPT_EN.md](docs/INSTALL_PROMPT_EN.md)**
-
-Tu préfères installer toi-même ? Continue à lire.
-
----
-
 ## Fonctionnalités
 
 - 🖼️ **Clipboard-first** — `analyze_clipboard`, `extract_text_from_clipboard`, `diagnose_error_from_clipboard`, `describe_ui_from_clipboard`, `code_from_clipboard`.
@@ -41,30 +30,29 @@ Tu préfères installer toi-même ? Continue à lire.
 - 🖥️ **Multi-OS** — Windows, macOS, Linux (X11 + Wayland).
 - 🔒 **Sécurisé** — validation extension/taille/magic-bytes, suppression auto des fichiers clipboard temporaires.
 - 🔌 **Standard MCP** — fonctionne avec Opencode, Claude Code, Cursor, Cline, Continue, ou tout client MCP.
+- ⚡ **TypeScript + Bun** — démarrage rapide, pas besoin de Python.
 
 ---
 
 ## Prérequis
 
-- **Python 3.10+**
+- **Bun** >= 1.0.0 (https://bun.sh)
 - **Clé API Groq** (gratuite, 30 secondes) : https://console.groq.com/keys
 - Un client MCP (Opencode, Claude Code, Cursor, Cline, Continue, ...)
 
-### Dépendances Python (installées automatiquement via `pip install -e .`)
+### Dépendances (installées automatiquement via `bun install`)
 
 | Paquet | Rôle |
 |---|---|
-| `mcp>=1.0.0` | Serveur de protocole MCP |
-| `groq>=0.11.0` | Client API Groq (vision Llama-4 Scout) |
-| `aiofiles>=23.0.0` | I/O fichier asynchrone |
-| `Pillow>=10.0.0` | Extraction clipboard (Windows/macOS), encodage PNG |
+| `@modelcontextprotocol/sdk` | Serveur de protocole MCP |
+| `groq-sdk` | Client API Groq (vision Llama-4 Scout) |
 
 ### Dépendances clipboard par OS
 
 | OS | Commande | Pourquoi |
 |---|---|---|
-| **Windows** | *rien à installer* | Pillow + pywin32 gèrent le clipboard nativement. |
-| **macOS** | `brew install pngpaste` *(fallback optionnel)* | Pillow suffit la plupart du temps. |
+| **Windows** | *rien à installer* | PowerShell gère le clipboard nativement. |
+| **macOS** | `brew install pngpaste` *(fallback optionnel)* | osascript suffit la plupart du temps. |
 | **Linux — Wayland** | `sudo apt install wl-clipboard` | Fournit `wl-paste`. |
 | **Linux — X11** | `sudo apt install xclip` | Ou équivalent pour ta distro. |
 
@@ -78,29 +66,20 @@ https://console.groq.com/keys
 ### 2. Installation
 
 ```bash
-git clone https://github.com/Capetlevrai/clipboard-vision-mcp.git
+git clone https://github.com/Rook-ai-bot/clipboard-vision-mcp.git
 cd clipboard-vision-mcp
-python -m venv .venv
-# Windows :
-.venv\Scripts\activate
-# macOS/Linux :
-source .venv/bin/activate
-pip install -e .
+bun install
 ```
 
-### 3. Smoke test (sans Groq)
-
-Copie une capture d'écran, puis :
+### 3. Teste que le serveur démarre
 
 ```bash
-python examples/smoke_test.py
+GROQ_API_KEY=gsk_ta_cle_ici bun run src/index.ts
 ```
 
-Attendu : `OK: clipboard image saved to <chemin>`.
+Il devrait démarrer et attendre silencieusement sur stdin. Ctrl+C pour arrêter.
 
 ### 4. Branche-le à ton client MCP
-
-Voir [docs/OPENCODE.md](docs/OPENCODE.md) pour Opencode (testé Windows) ou [docs/CLIENTS.md](docs/CLIENTS.md) pour Claude Code / Cursor / Cline / Continue.
 
 **Opencode** (`%APPDATA%\opencode\opencode.json` sous Windows, `~/.config/opencode/opencode.json` sous Linux/macOS) :
 
@@ -109,11 +88,7 @@ Voir [docs/OPENCODE.md](docs/OPENCODE.md) pour Opencode (testé Windows) ou [doc
   "mcp": {
     "clipboard-vision": {
       "type": "local",
-      "command": [
-        "C:\\chemin\\vers\\clipboard-vision-mcp\\.venv\\Scripts\\python.exe",
-        "-m",
-        "clipboard_vision_mcp"
-      ],
+      "command": ["bun", "run", "/chemin/absolu/vers/clipboard-vision-mcp/src/index.ts"],
       "enabled": true,
       "environment": {
         "GROQ_API_KEY": "gsk_ta_cle_ici"
@@ -123,7 +98,23 @@ Voir [docs/OPENCODE.md](docs/OPENCODE.md) pour Opencode (testé Windows) ou [doc
 }
 ```
 
-> 💡 **Utilise le chemin absolu du Python du venv.** Ça garantit que le MCP démarre avec les bonnes dépendances, peu importe le shell, le cwd ou le venv actif.
+**Claude Code** (`~/.claude/settings.json`) :
+
+```json
+{
+  "mcpServers": {
+    "clipboard-vision": {
+      "command": "bun",
+      "args": ["run", "/chemin/absolu/vers/clipboard-vision-mcp/src/index.ts"],
+      "env": {
+        "GROQ_API_KEY": "gsk_ta_cle_ici"
+      }
+    }
+  }
+}
+```
+
+> 💡 **Utilise le chemin absolu vers le projet.** Ça garantit que le MCP démarre correctement, peu importe le shell ou le cwd.
 
 ### 5. ⚠️ Raccourcis Opencode pour coller des images
 
@@ -141,12 +132,6 @@ Opencode **ne** lie **pas** le collage d'image à `Ctrl+V` / `Alt+V` par défaut
 ```
 
 Redémarre Opencode.
-
-### 6. Est-ce que ça démarre automatiquement après un redémarrage Windows ?
-
-**Oui.** Opencode relit `opencode.json` à chaque lancement et démarre automatiquement tout serveur MCP avec `"type": "local"` et `"enabled": true`. Comme la commande utilise le **chemin absolu du Python du venv**, peu importe depuis quel shell ou dossier Opencode est lancé.
-
-Redémarre le PC → ouvre Opencode → les outils `clipboard-vision` sont listés. Zéro manip manuelle.
 
 ---
 
@@ -211,7 +196,7 @@ Ouvre un [security advisory privé](https://github.com/Capetlevrai/clipboard-vis
                               │
                               ▼
                     lit le presse-papiers système
-                    (PIL / wl-paste / xclip)
+                    (PowerShell / osascript / wl-paste / xclip)
                     → valide → base64 → envoie → supprime
 ```
 
@@ -221,7 +206,7 @@ Ouvre un [security advisory privé](https://github.com/Capetlevrai/clipboard-vis
 
 - **« Clipboard does not contain an image. »** — Copie une vraie image, pas un icône de fichier ou du texte. Sous Linux, teste `wl-paste --type image/png` ou `xclip -selection clipboard -t image/png -o | file -` hors du MCP.
 - **« GROQ_API_KEY is not set. »** — Vérifie le bloc `environment` dans la config client, puis **redémarre complètement** le client.
-- **Les outils n'apparaissent pas dans Opencode.** — Regarde les logs MCP d'Opencode. Lance `python -m clipboard_vision_mcp` à la main — il doit démarrer et rester silencieux sur stdin.
+- **Les outils n'apparaissent pas dans Opencode.** — Regarde les logs MCP d'Opencode. Lance `bun run src/index.ts` à la main — il doit démarrer et rester silencieux sur stdin.
 - **« Refusing to read '<ext>' — only image files are allowed. »** — Tu (ou le LLM) a passé un chemin non-image. C'est le garde-fou sécurité qui fait son boulot.
 
 ---
