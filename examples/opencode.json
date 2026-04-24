@@ -1,0 +1,16 @@
+{
+  "mcp": {
+    "clipboard-vision": {
+      "type": "local",
+      "command": ["python", "-m", "clipboard_vision_mcp"],
+      "environment": {
+        "GROQ_API_KEY": "gsk_your_key_here"
+      },
+      "enabled": true
+    }
+  },
+  "keybinds": {
+    "input_paste": "ctrl+v",
+    "input_paste_image": "alt+v"
+  }
+}
